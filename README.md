@@ -1,60 +1,104 @@
-# template-for-proposals
+# String.cooked proposal
 
-A repository template for ECMAScript proposals.
+**Champions:**
 
-## Before creating a proposal
+- _none_
 
-Please ensure the following:
-  1. You have read the [process document](https://tc39.github.io/process-document/)
-  1. You have reviewed the [existing proposals](https://github.com/tc39/proposals/)
-  1. You are aware that your proposal requires being a member of TC39, or locating a TC39 delegate to "champion" your proposal
+**Authors:**
 
-## Create your proposal repo
+- Darien Maillet Valentine
 
-Follow these steps:
-  1.  Click the green ["use this template"](https://github.com/tc39/template-for-proposals/generate) button in the repo header. (Note: Do not fork this repo in GitHub's web interface, as that will later prevent transfer into the TC39 organization)
-  1.  Go to your repo settings “Options” page, under “GitHub Pages”, and set the source to the **main branch** under the root (and click Save, if it does not autosave this setting)
-      1. check "Enforce HTTPS"
-      1. On "Options", under "Features", Ensure "Issues" is checked, and disable "Wiki", and "Projects" (unless you intend to use Projects)
-      1. Under "Merge button", check "automatically delete head branches"
-<!--
-  1.  Avoid merge conflicts with build process output files by running:
-      ```sh
-      git config --local --add merge.output.driver true
-      git config --local --add merge.output.driver true
-      ```
-  1.  Add a post-rewrite git hook to auto-rebuild the output on every commit:
-      ```sh
-      cp hooks/post-rewrite .git/hooks/post-rewrite
-      chmod +x .git/hooks/post-rewrite
-      ```
--->
-  3.  ["How to write a good explainer"][explainer] explains how to make a good first impression.
+**Stage:** -1 (initial idea, no champion)
 
-      > Each TC39 proposal should have a `README.md` file which explains the purpose
-      > of the proposal and its shape at a high level.
-      >
-      > ...
-      >
-      > The rest of this page can be used as a template ...
+## Overview
 
-      Your explainer can point readers to the `index.html` generated from `spec.emu`
-      via markdown like
+This proposes a new static String method like `String.raw` but which
+concatenates the “cooked” (escaped string value) strings rather than the raw
+strings — the same behavior as that of an untagged template literal.
 
-      ```markdown
-      You can browse the [ecmarkup output](https://ACCOUNT.github.io/PROJECT/)
-      or browse the [source](https://github.com/ACCOUNT/PROJECT/blob/HEAD/spec.emu).
-      ```
+```js
+String.raw`consuming \u0072aw or undercooked strings may increase your risk of stringborne illness`;
+// → "consuming \u0072aw or undercooked strings may increase your risk of stringborne illness"
 
-      where *ACCOUNT* and *PROJECT* are the first two path elements in your project's Github URL.
-      For example, for github.com/**tc39**/**template-for-proposals**, *ACCOUNT* is "tc39"
-      and *PROJECT* is "template-for-proposals".
+String.cooked`mmm ... \u0064elicious cooked string`;
+// → "mmm ... delicious cooked string"
+```
 
+## Motivation
 
-## Maintain your proposal repo
+Many template tags are interested in some kind of preprocessing of either the
+“cooked” string values, the substitution values, or both — but ultimately they
+may still want to perform the “default” concatenation behavior after this
+processing.
 
-  1. Make your changes to `spec.emu` (ecmarkup uses HTML syntax, but is not HTML, so I strongly suggest not naming it ".html")
-  1. Any commit that makes meaningful changes to the spec, should run `npm run build` and commit the resulting output.
-  1. Whenever you update `ecmarkup`, run `npm run build` and commit any changes that come from that dependency.
+This can be achieved today in at least two ways:
 
-  [explainer]: https://github.com/tc39/how-we-work/blob/HEAD/explainer.md
+1. Implementing the “zip-like” concatenation behavior for the string values and
+   substitution values “manually”.
+2. Delegating to `String.raw`.
+
+The latter is very attractive, but in a way that makes it a potential pit of
+failure. It’s the only exposed way to get something that looks like the
+“default” behavior but it’s not super obvious that it’s not since, for most
+input strings people are likely to test, it would appear as though it is!
+
+In order to access the “right” behavior for most use cases, delegating to `raw`
+is possible, but you have to pass the cooked strings _as if_ they were raw
+strings, i.e. `String.raw({ raw: strs }, ...subs)`, not
+`String.raw(strs, ...subs)`. Though this works, the indirection is confusing;
+there aren’t any real raw string values in play here.
+
+> It may also be tempting for folks to use `String.raw` as if it were a true
+> identity function for other reasons, as is shown in
+> [this Twitter post](https://twitter.com/wcbytes/status/1430271001632415745).
+> Again, it’s understandable why folks might see the _one_ built-in tag and
+> think this is what they’re looking for, but with `cooked` present as well,
+> the distinction being made becomes more apparent.
+
+## Use cases
+
+The primary use case is to serve as a final step in custom template tags which
+perform some kind of mapping over input. For example, consider a tag which is
+meant to escape URL path segments in such a way that they round trip (i.e., the
+interpolated `/` characters get escaped as `%2F`):
+
+```js
+function safePath(strings, ...subs) {
+  return String.cooked(strings, ...subs.map(sub => encodeURIComponent(sub)));
+}
+```
+
+In other words, although it has the signature of a template tag function, it is
+mainly expected to facilitate building other template tags without needing to
+reimplement the usual string/substitution concatenation logic.
+
+As a tag in its own right, it acts like the template tag equivalent of the
+identity function, which may also help with usage patterns like the example
+linked to earlier where the user wished to use template tags to provide a signal
+to their editor that the content should be interpreted as HTML. Some compilation
+or preprocessing tools may also benefit from that, e.g. Prettier singles out the
+tags with the binding “html” for different string transformation.
+
+## Q&A
+
+**Q:** Should the name be “cooked”?
+
+**A:** Not sure! This is an initial proposal. Feedback about whether this name
+is intuitive and clear would be helpful. The term does have a history of usage
+in discussion contexts (ES Discuss, etc) as the counterpart for “raw,” but it
+has not appeared in any spec text or API surface to date as far as I know.
+
+**Q:** What is the behavior if `undefined` is encountered when reading
+properties from the first argument object?
+
+**A:** The tentatively proposed behavior is that if `undefined` is returned when
+reading one of the index-keyed properties, a `TypeError` is thrown. For any
+other value type, ordinary `ToString` conversion is attempted.
+
+This is because (assuming the first argument is a “real” template array object)
+`undefined` appearing indicates that the raw segment source contained
+[NotEscapeSequence](https://tc39.es/ecma262/#prod-NotEscapeSequence), i.e.
+it is a template which has a raw value but _does not have_ a cooked value. If
+such a template literal is _untagged,_ a `SyntaxError` would be thrown (though
+that would likely not be appropriate for an evaluation-time API, hence use of
+`TypeError` instead).
