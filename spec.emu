@@ -32,7 +32,7 @@ contributors: Darien Maillet Valentine
     1. Repeat,
       1. Let _nextKey_ be ! ToString(𝔽(_nextIndex_)).
       1. Let _nextVal_ be ? Get(_cooked_, _nextKey_).
-      1. If Type(_nextVal_) is Undefined, If Type(_x_) is Undefined, throw a *TypeError* exception.
+      1. If Type(_nextVal_) is Undefined, throw a *TypeError* exception.
       1. Let _nextSeg_ be ? ToString(_nextVal_).
       1. Append the code unit elements of _nextSeg_ to the end of _stringElements_.
       1. If _nextIndex_ + 1 = _literalSegments_, then
