@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/base16/solarized-light.min.css"><link rel="stylesheet" href="./spec.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
 <script src="./spec.js"></script>
-<title>Proposal Title Goes Here</title><script>'use strict';
+<title>String.raw</title><script>'use strict';
 let sdoBox = {
   init() {
     this.$alternativeId = null;
@@ -1112,7 +1112,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 let sdoMap = JSON.parse(`{}`);
-let biblio = JSON.parse(`{"refsByClause":{"sec-demo-clause":["_ref_0"]},"entries":[{"type":"clause","id":"sec-demo-clause","aoid":null,"titleHTML":"This is an emu-clause","number":"1","referencingIds":[],"key":"This is an emu-clause"},{"type":"clause","id":"sec-copyright-and-software-license","aoid":null,"titleHTML":"Copyright &amp; Software License","number":"A","referencingIds":[],"key":"Copyright & Software License"}]}`);
+let biblio = JSON.parse(`{"refsByClause":{"sec-string.cooked":["_ref_0","_ref_1","_ref_2","_ref_3","_ref_4","_ref_5","_ref_6","_ref_7"]},"entries":[{"type":"clause","id":"sec-string.cooked","aoid":null,"titleHTML":"String.cooked ( <var>template</var>, ...<var>substitutions</var> )","number":"1","referencingIds":[],"key":"String.cooked ( template, ...substitutions )"},{"type":"clause","id":"sec-copyright-and-software-license","aoid":null,"titleHTML":"Copyright &amp; Software License","number":"A","referencingIds":[],"key":"Copyright & Software License"}]}`);
 ;let usesMultipage = false</script><style>body {
   display: flex;
   font-size: 18px;
@@ -2290,17 +2290,36 @@ li.menu-search-result-term:before {
 .clause-attributes-tag a {
   color: #884400;
 }
-</style></head><body><div id="menu-toggle">☰</div><div id="menu-spacer"></div><div id="menu"><div id="menu-search"><input type="text" id="menu-search-box" placeholder="Search..."><div id="menu-search-results" class="inactive"></div></div><div id="menu-pins"><div class="menu-pane-header">Pins</div><ul id="menu-pins-list"></ul></div><div class="menu-pane-header">Table of Contents</div><div id="menu-toc"><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-demo-clause" title="This is an emu-clause"><span class="secnum">1</span> This is an emu-clause</a></li><li><span class="item-toggle-none"></span><a href="#sec-copyright-and-software-license" title="Copyright &amp; Software License"><span class="secnum">A</span> Copyright &amp; Software License</a></li></ol></div></div><div id="spec-container"><h1 class="version">Stage -1 Draft / August 19, 2021</h1><h1 class="title">Proposal Title Goes Here</h1>
+</style></head><body><div id="menu-toggle">☰</div><div id="menu-spacer"></div><div id="menu"><div id="menu-search"><input type="text" id="menu-search-box" placeholder="Search..."><div id="menu-search-results" class="inactive"></div></div><div id="menu-pins"><div class="menu-pane-header">Pins</div><ul id="menu-pins-list"></ul></div><div class="menu-pane-header">Table of Contents</div><div id="menu-toc"><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-string.cooked" title="String.cooked ( template, ...substitutions )"><span class="secnum">1</span> String.cooked ( <var>template</var>, ...<var>substitutions</var> )</a></li><li><span class="item-toggle-none"></span><a href="#sec-copyright-and-software-license" title="Copyright &amp; Software License"><span class="secnum">A</span> Copyright &amp; Software License</a></li></ol></div></div><div id="spec-container"><h1 class="version">Stage -1 Draft / August 25, 2021</h1><h1 class="title">String.raw</h1>
 
-<emu-clause id="sec-demo-clause">
-  <h1><span class="secnum">1</span> This is an emu-clause</h1>
-  <p>This is an algorithm:</p>
-  <emu-alg><ol><li>Let <var>proposal</var> be <emu-val>undefined</emu-val>.</li><li>If IsAccepted(<var>proposal</var>),<ol><li>Let <var>stage</var> be <emu-val>0</emu-val>.</li></ol></li><li>Else,<ol><li>Let <var>stage</var> be <emu-val>-1</emu-val>.</li></ol></li><li>Return ?&nbsp;<emu-xref aoid="ToString" id="_ref_0"><a href="https://tc39.es/ecma262/#sec-tostring">ToString</a></emu-xref>(<var>proposal</var>).</li></ol></emu-alg>
-</emu-clause><emu-annex id="sec-copyright-and-software-license">
+<h2>New API</h2>
+
+<p>This adds a builtin static method to String</p>
+
+<p>
+  Added under
+  <a href="https://tc39.es/ecma262/#sec-properties-of-the-string-constructor">
+    Properties of the String Constructor</a>:
+</p>
+
+<emu-clause id="sec-string.cooked">
+  <h1><span class="secnum">1</span> String.cooked ( <var>template</var>, ...<var>substitutions</var> )</h1>
+  <p>The <code>String.cooked</code> function may be called with a variable number of arguments. The first argument is <var>template</var> and the remainder of the arguments form the <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">List</a></emu-xref> <var>substitutions</var>. The following steps are taken:</p>
+  <emu-alg><ol><li>Let <var>numberOfSubstitutions</var> be the number of elements in <var>substitutions</var>.</li><li>Let <var>cooked</var> be ?&nbsp;<emu-xref aoid="ToObject" id="_ref_0"><a href="https://tc39.es/ecma262/#sec-toobject">ToObject</a></emu-xref>(<var>template</var>).</li><li>Let <var>literalSegments</var> be ?&nbsp;<emu-xref aoid="LengthOfArrayLike" id="_ref_1"><a href="https://tc39.es/ecma262/#sec-lengthofarraylike">LengthOfArrayLike</a></emu-xref>(<var>cooked</var>).</li><li>If <var>literalSegments</var> ≤ 0, return the empty String.</li><li>Let <var>stringElements</var> be a new empty <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">List</a></emu-xref>.</li><li>Let <var>nextIndex</var> be 0.</li><li>Repeat,<ol><li>Let <var>nextKey</var> be !&nbsp;<emu-xref aoid="ToString" id="_ref_2"><a href="https://tc39.es/ecma262/#sec-tostring">ToString</a></emu-xref>(<emu-xref href="#𝔽"><a href="https://tc39.es/ecma262/#𝔽">𝔽</a></emu-xref>(<var>nextIndex</var>)).</li><li>Let <var>nextVal</var> be ?&nbsp;<emu-xref aoid="Get" id="_ref_3"><a href="https://tc39.es/ecma262/#sec-get-o-p">Get</a></emu-xref>(<var>cooked</var>, <var>nextKey</var>).</li><li>If <emu-xref aoid="Type" id="_ref_4"><a href="https://tc39.es/ecma262/#sec-ecmascript-data-types-and-values">Type</a></emu-xref>(<var>nextVal</var>) is Undefined, If <emu-xref aoid="Type" id="_ref_5"><a href="https://tc39.es/ecma262/#sec-ecmascript-data-types-and-values">Type</a></emu-xref>(<var>x</var>) is Undefined, throw a <emu-val>TypeError</emu-val> exception.</li><li>Let <var>nextSeg</var> be ?&nbsp;<emu-xref aoid="ToString" id="_ref_6"><a href="https://tc39.es/ecma262/#sec-tostring">ToString</a></emu-xref>(<var>nextVal</var>).</li><li>Append the code unit elements of <var>nextSeg</var> to the end of <var>stringElements</var>.</li><li>If <var>nextIndex</var> + 1 = <var>literalSegments</var>, then<ol><li>Return the String value whose code units are the elements in the <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">List</a></emu-xref> <var>stringElements</var>. If <var>stringElements</var> has no elements, the empty String is returned.</li></ol></li><li>If <var>nextIndex</var> &lt; <var>numberOfSubstitutions</var>, let <var>next</var> be <var>substitutions</var>[<var>nextIndex</var>].</li><li>Else, let <var>next</var> be the empty String.</li><li>Let <var>nextSub</var> be ?&nbsp;<emu-xref aoid="ToString" id="_ref_7"><a href="https://tc39.es/ecma262/#sec-tostring">ToString</a></emu-xref>(<var>next</var>).</li><li>Append the code unit elements of <var>nextSub</var> to the end of <var>stringElements</var>.</li><li>Set <var>nextIndex</var> to <var>nextIndex</var> + 1.</li></ol></li></ol></emu-alg>
+
+  <emu-note><span class="note">Note</span><div class="note-contents">
+    <p>The <code>cooked</code> function implements behavior suitable for a tag function of a Tagged Template (<emu-xref href="#sec-tagged-templates"><a href="https://tc39.es/ecma262/#sec-tagged-templates">12.3.11</a></emu-xref>). When called as such, the first argument will be a well formed template object and the rest parameter will contain the substitution values. In practice, it is more useful as a function which custom tag functions <var>delegate</var> to as a final step.</p>
+  </div></emu-note>
+
+  <emu-note type="editor"><span class="note">Editor's Note</span><div class="note-contents">
+    <p>The specification text here is nearly identical to that for <code>String.raw</code>. I expect that if this proposal were to gain traction, this would end up refactored. The differences are that the object strings are read from is <code>template</code> rather than <code>template.cooked</code> and that it will throw if a cooked value is undefined.
+  
+
+</p></div></emu-note></emu-clause><emu-annex id="sec-copyright-and-software-license">
       <h1><span class="secnum">A</span> Copyright &amp; Software License</h1>
       
       <h2>Copyright Notice</h2>
-      <p>© 2021 Your Name(s) Here</p>
+      <p>© 2021 Darien Maillet Valentine</p>
 
       <h2>Software License</h2>
       <p>All Software contained in this document ("Software") is protected by copyright and is being made available under the "BSD License", included below. This Software may be subject to third party rights (rights from parties other than Ecma International), including patent rights, and no licenses under such third party rights are granted under this license even if the third party concerned is a member of Ecma International. SEE THE ECMA CODE OF CONDUCT IN PATENT MATTERS AVAILABLE AT https://ecma-international.org/memento/codeofconduct.htm FOR INFORMATION REGARDING THE LICENSING OF PATENT CLAIMS THAT ARE REQUIRED TO IMPLEMENT ECMA INTERNATIONAL STANDARDS.</p>
@@ -2315,5 +2334,4 @@ li.menu-search-result-term:before {
 
 <p>THIS SOFTWARE IS PROVIDED BY THE ECMA INTERNATIONAL "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL ECMA INTERNATIONAL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
 
-    </emu-annex>
-</div></body>
+    </emu-annex></div></body>
