@@ -9,7 +9,6 @@ stage: -1
 contributors: Darien Maillet Valentine
 </pre>
 
-
 <h2>New API</h2>
 
 <p>This adds a builtin static method to String</p>

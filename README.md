@@ -10,6 +10,9 @@
 
 **Stage:** -1 (initial idea, no champion)
 
+> You can browse the [ecmarkup output](https://bathos.github.io/proposal-string-cooked/)
+or browse the [source](https://github.com/bathos/proposal-string-cooked/blob/HEAD/spec.emu).
+
 ## Overview
 
 This proposes a new static String method like `String.raw` but which
