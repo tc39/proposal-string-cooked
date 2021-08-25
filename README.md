@@ -43,7 +43,7 @@ This can be achieved today in at least two ways:
 The latter is very attractive; it’s the only exposed way to get something that
 _looks like_ the “default” behavior. That it’s actually different is not super
 obvious because for most input strings people are likely to test the output will
-be the same; the different isn’t apparent unless you feed it literal segments
+be the same; the difference isn’t apparent unless you feed it literal segments
 which contain escape sequences (or “uncookable” escape-like sequences). The
 combination of `raw` being present and no counterpart for the “cooked” behavior
 being present creates a sort of pit-of-failure.
