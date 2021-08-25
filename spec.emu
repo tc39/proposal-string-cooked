@@ -49,6 +49,6 @@ contributors: Darien Maillet Valentine
   </emu-note>
 
   <emu-note type="editor">
-    <p>The specification text here is nearly identical to that for `String.raw`. I expect that if this proposal were to gain traction, this would end up refactored. The differences are that the object strings are read from is `template` rather than `template.cooked` and that it will throw if a cooked value is undefined.
+    <p>The specification text here is nearly identical to that for `String.raw`. I expect that if this proposal were to gain traction, this would end up refactored. The differences are that the object strings are read from is `template` rather than `template.raw` and that it will throw if a cooked value is undefined.
   </emu-note>
 </emu-clause>
