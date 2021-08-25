@@ -40,35 +40,41 @@ This can be achieved today in at least two ways:
    substitution values “manually”.
 2. Delegating to `String.raw`.
 
-The latter is very attractive, but in a way that makes it a potential pit of
-failure. It’s the only exposed way to get something that looks like the
-“default” behavior but it’s not super obvious that it’s not since, for most
-input strings people are likely to test, it would appear as though it is!
+The latter is very attractive; it’s the only exposed way to get something that
+_looks like_ the “default” behavior. That it’s actually different is not super
+obvious because for most input strings people are likely to test, it would
+appear as though they are. The combination of `raw` being present with no
+counterpart for the “cooked” string behavior creates a sort of pit-of-failure.
 
-In order to access the “right” behavior for most use cases, delegating to `raw`
-is possible, but you have to pass the cooked strings _as if_ they were raw
-strings, i.e. `String.raw({ raw: strs }, ...subs)`, not
+Delegating to `raw` is possible — but it requires passing the cooked strings _as
+if_ they were raw strings, i.e. `String.raw({ raw: strs }, ...subs)` instead of
 `String.raw(strs, ...subs)`. Though this works, the indirection is confusing;
-there aren’t any real raw string values in play here.
+there aren’t any “real” raw string values in play here.
 
 > It may also be tempting for folks to use `String.raw` as if it were a true
-> identity function for other reasons, as is shown in
+> identity function for other reasons, as can be seen in
 > [this Twitter post](https://twitter.com/wcbytes/status/1430271001632415745).
-> Again, it’s understandable why folks might see the _one_ built-in tag and
-> think this is what they’re looking for, but with `cooked` present as well,
-> the distinction being made becomes more apparent.
+> Again, it seems pretty understandable why folks might see the _one_ built-in
+> tag and assume that it’s what they’re looking for, but hopefully with `cooked`
+> present as well, the distinction being made will become more apparent.
 
 ## Use cases
 
 The primary use case is to serve as a final step in custom template tags which
 perform some kind of mapping over input. For example, consider a tag which is
-meant to escape URL path segments in such a way that they round trip (i.e., the
-interpolated `/` characters get escaped as `%2F`):
+meant to escape URL path segments in such a way that they round trip (i.e., any
+`/`, `?`, and `#` characters in the interpolated portions get percent-encoded):
 
 ```js
 function safePath(strings, ...subs) {
   return String.cooked(strings, ...subs.map(sub => encodeURIComponent(sub)));
 }
+
+let id = 'spottie?';
+
+safePath`/cats/${ id }`;
+
+// → "/cats/spottie%3F"
 ```
 
 In other words, although it has the signature of a template tag function, it is
@@ -105,3 +111,8 @@ it is a template which has a raw value but _does not have_ a cooked value. If
 such a template literal is _untagged,_ a `SyntaxError` would be thrown (though
 that would likely not be appropriate for an evaluation-time API, hence use of
 `TypeError` instead).
+
+Arguably it could instead throw for any non-String value (unidiomatic) or it
+could not throw for `undefined`. The rationale for the currently proposed
+behavior is that it aims to balance footgun prevention with other ergonomics
+concerns.
