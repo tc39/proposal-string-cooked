@@ -42,9 +42,11 @@ This can be achieved today in at least two ways:
 
 The latter is very attractive; it’s the only exposed way to get something that
 _looks like_ the “default” behavior. That it’s actually different is not super
-obvious because for most input strings people are likely to test, it would
-appear as the behavior is the same. The combination of `raw` being present with
-no counterpart for the “cooked” behavior creates a sort of pit-of-failure.
+obvious because for most input strings people are likely to test the output will
+be the same; the different isn’t apparent unless you feed it literal segments
+which contain escape sequences (or “uncookable” escape-like sequences). The
+combination of `raw` being present and no counterpart for the “cooked” behavior
+being present creates a sort of pit-of-failure.
 
 Delegating to `raw` is possible — but it requires passing the cooked strings _as
 if_ they were raw strings, i.e. `String.raw({ raw: strs }, ...subs)` instead of
