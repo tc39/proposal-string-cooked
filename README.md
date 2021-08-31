@@ -92,17 +92,16 @@ tags with the binding “html” for different string transformation.
 
 ## Q&A
 
-**Q:** Should the name be “cooked”?
+### Should the name be “cooked”?
 
-**A:** Not sure! This is an initial proposal. Feedback about whether this name
+Not sure! This is an initial proposal. Feedback about whether this name
 is intuitive and clear would be helpful. The term does have a history of usage
 in discussion contexts (ES Discuss, etc) as the counterpart for “raw,” but it
 has not appeared in any spec text or API surface to date as far as I know.
 
-**Q:** What is the behavior if `undefined` is encountered when reading
-properties from the first argument object?
+### What is the behavior if `undefined` is encountered when reading properties from the first argument object?
 
-**A:** The tentatively proposed behavior is that if `undefined` is returned when
+The tentatively proposed behavior is that if `undefined` is returned when
 reading one of the index-keyed properties, a `TypeError` is thrown. For any
 other value type, ordinary `ToString` conversion is attempted.
 
