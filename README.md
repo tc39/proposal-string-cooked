@@ -3,6 +3,7 @@
 **Champions:**
 
 - Jamie Kyle (Rome)
+- Hemanth HM 
 
 **Authors:**
 
