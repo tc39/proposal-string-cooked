@@ -2,13 +2,13 @@
 
 **Champions:**
 
-- _none_
+- Jamie Kyle (Rome)
 
 **Authors:**
 
 - Darien Maillet Valentine
 
-**Stage:** -1 (initial idea, no champion)
+**Stage:** 0
 
 > You can browse the [ecmarkup output](https://bathos.github.io/proposal-string-cooked/)
 or browse the [source](https://github.com/bathos/proposal-string-cooked/blob/HEAD/spec.emu).
