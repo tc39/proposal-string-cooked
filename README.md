@@ -28,6 +28,16 @@ String.cooked`mmm ... \u0064elicious cooked string`;
 // → "mmm ... delicious cooked string"
 ```
 
+This can be used to simplify the creation of new template string tags:
+
+```js
+function myTag(strings, ...values) {
+  return String.cooked(strings, ...values.map(value => String(value).toUpperCase())
+}
+
+myTag`hello ${'world'}` // "hello WORLD"
+```
+
 ## Motivation
 
 Many template tags are interested in some kind of preprocessing of either the
