@@ -128,3 +128,7 @@ Arguably it could instead throw for any non-String value (unidiomatic) or it
 could not throw for `undefined`. The rationale for the currently proposed
 behavior is that it aims to balance footgun prevention with other ergonomics
 concerns.
+
+## Polyfill
+
+- A polyfill is available in the [`core-js`](https://github.com/zloirock/core-js) library. You can find it in the [ECMAScript proposals section](https://github.com/zloirock/core-js#stringcooked).
