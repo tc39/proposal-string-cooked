@@ -9,7 +9,7 @@
 
 - Darien Maillet Valentine
 
-**Stage:** 0 ([Tracking Issue](https://github.com/bathos/proposal-string-cooked/issues/3))
+**Stage:** 1 ([Tracking Issue](https://github.com/bathos/proposal-string-cooked/issues/3))
 
 > You can browse the [ecmarkup output](https://tc39.es/proposal-string-cooked/)
 or browse the [source](https://github.com/bathos/proposal-string-cooked/blob/HEAD/spec.emu).
