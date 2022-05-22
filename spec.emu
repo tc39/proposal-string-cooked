@@ -24,7 +24,7 @@ contributors: Darien Maillet Valentine
     </emu-alg>
 
     <emu-note>
-      <p>The `cooked` function implements behavior suitable for a tag function of a <a href="https://tc39.es/ecma262/multipage/ecmascript-language-expressions.html#sec-tagged-templates">Tagged Template</a>. When called as such, the first argument will be a well formed template object and the rest parameter will contain the substitution values. In practice, it is more useful as a function which custom tag functions _delegate_ to as a final step.</p>
+      <p>The `cooked` function implements behavior suitable for a tag function of a Tagged Template (<emu-xref href="#sec-tagged-templates"></emu-xref>). When called as such, the first argument will be a well formed template object and the rest parameter will contain the substitution values. In practice, it is more useful as a function which custom tag functions _delegate_ to as a final step.</p>
     </emu-note>
 
     <emu-note type="editor">
