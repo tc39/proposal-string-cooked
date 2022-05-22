@@ -37,7 +37,7 @@ contributors: Darien Maillet Valentine
       CookTemplateStringsArray (
         _template_: an ECMAScript language value,
         _substitutions_: a List of ECMAScript language values,
-      )
+      ): a String
     </h1>
     <dl class="header">
     </dl>
