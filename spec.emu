@@ -5,7 +5,7 @@
 <script src="./spec.js"></script>
 <pre class="metadata">
 title: String.cooked
-stage: -1
+stage: 1
 contributors: Darien Maillet Valentine
 </pre>
 
@@ -13,42 +13,56 @@ contributors: Darien Maillet Valentine
 
 <p>This adds a builtin static method to String</p>
 
-<p>
-  Added under
-  <a href="https://tc39.es/ecma262/#sec-properties-of-the-string-constructor">
-    Properties of the String Constructor</a>:
-</p>
+<emu-clause id="sec-properties-of-the-string-constructor">
+  <h1>Properties of the String Constructor <emu-xref href="#sec-properties-of-the-string-constructor"></emu-xref></h1>
 
-<emu-clause id="sec-string.cooked">
-  <h1>String.cooked ( _template_, ..._substitutions_ )</h1>
-  <p>The `String.cooked` function may be called with a variable number of arguments. The first argument is _template_ and the remainder of the arguments form the List _substitutions_. The following steps are taken:</p>
-  <emu-alg>
-    1. Let _numberOfSubstitutions_ be the number of elements in _substitutions_.
-    1. Let _cooked_ be ? ToObject(_template_).
-    1. Let _literalSegments_ be ? LengthOfArrayLike(_cooked_).
-    1. If _literalSegments_ &le; 0, return the empty String.
-    1. Let _stringElements_ be a new empty List.
-    1. Let _nextIndex_ be 0.
-    1. Repeat,
-      1. Let _nextKey_ be ! ToString(𝔽(_nextIndex_)).
-      1. Let _nextVal_ be ? Get(_cooked_, _nextKey_).
-      1. If Type(_nextVal_) is Undefined, throw a *TypeError* exception.
-      1. Let _nextSeg_ be ? ToString(_nextVal_).
-      1. Append the code unit elements of _nextSeg_ to the end of _stringElements_.
-      1. If _nextIndex_ + 1 = _literalSegments_, then
-        1. Return the String value whose code units are the elements in the List _stringElements_. If _stringElements_ has no elements, the empty String is returned.
-      1. If _nextIndex_ &lt; _numberOfSubstitutions_, let _next_ be _substitutions_[_nextIndex_].
-      1. Else, let _next_ be the empty String.
-      1. Let _nextSub_ be ? ToString(_next_).
-      1. Append the code unit elements of _nextSub_ to the end of _stringElements_.
-      1. Set _nextIndex_ to _nextIndex_ + 1.
-  </emu-alg>
+  <emu-clause id="sec-string.cooked">
+    <h1>String.cooked ( _template_, ..._substitutions_ )</h1>
+    <p>The `String.cooked` function may be called with a variable number of arguments. The first argument is _template_ and the remainder of the arguments form the List _substitutions_. The following steps are taken:</p>
+    <emu-alg>
+      1. Return ? InterpolateTemplateStringsArray(_template_, _substitutions_, ~cooked~).
+    </emu-alg>
 
-  <emu-note>
-    <p>The `cooked` function implements behavior suitable for a tag function of a Tagged Template (<emu-xref href="#sec-tagged-templates"></emu-xref>). When called as such, the first argument will be a well formed template object and the rest parameter will contain the substitution values. In practice, it is more useful as a function which custom tag functions _delegate_ to as a final step.</p>
-  </emu-note>
+    <emu-note>
+      <p>The `cooked` function implements behaviour suitable for a tag function of a Tagged Template (<emu-xref href="#sec-tagged-templates"></emu-xref>). When called as such, the first argument will be a well formed template object and the rest parameter will contain the substitution values. In practice, it is more useful as a function which custom tag functions _delegate_ to as a final step.</p>
+    </emu-note>
+  </emu-clause>
 
-  <emu-note type="editor">
-    <p>The specification text here is nearly identical to that for `String.raw`. I expect that if this proposal were to gain traction, this would end up refactored. The differences are that the object strings are read from is `template` rather than `template.raw` and that it will throw if a cooked value is undefined.
-  </emu-note>
+  <emu-clause id="sec-cook-template-strings-array" type="abstract operation">
+    <h1>
+      InterpolateTemplateStringsArray (
+        _template_: an ECMAScript language value,
+        _substitutions_: a List of ECMAScript language values,
+        _prep_: ~cooked~ or ~raw~,
+      ): either a normal completion containing a String or a throw completion
+    </h1>
+    <dl class="header">
+    </dl>
+    <emu-alg>
+      1. Let _numberOfSubstitutions_ be the number of elements in _substitutions_.
+      1. Let _cooked_ be ? ToObject(_template_).
+      1. If _prep_ is ~cooked~, let _t_ be _cooked_; else let _t_ be ? ToObject(? Get(_cooked_, *"raw"*)).
+      1. Let _literalSegments_ be ? LengthOfArrayLike(_t_).
+      1. If _literalSegments_ &le; 0, return the empty String.
+      1. Let _stringElements_ be a new empty List.
+      1. Let _nextIndex_ be 0.
+      1. Repeat,
+        1. Let _nextKey_ be ! ToString(𝔽(_nextIndex_)).
+        1. Let _nextVal_ be ? Get(_t_, _nextKey_).
+        1. If Type(_nextVal_) is Undefined, throw a *TypeError* exception.
+        1. Let _nextSeg_ be ? ToString(_nextVal_).
+        1. Append the code unit elements of _nextSeg_ to the end of _stringElements_.
+        1. If _nextIndex_ + 1 = _literalSegments_, then
+          1. Return the String value whose code units are the elements in the List _stringElements_. If _stringElements_ has no elements, the empty String is returned.
+        1. If _nextIndex_ &lt; _numberOfSubstitutions_, let _next_ be _substitutions_[_nextIndex_].
+        1. Else, let _next_ be the empty String.
+        1. Let _nextSub_ be ? ToString(_next_).
+        1. Append the code unit elements of _nextSub_ to the end of _stringElements_.
+        1. Set _nextIndex_ to _nextIndex_ + 1.
+    </emu-alg>
+
+    <emu-note type="editor">
+      <p>This implements a generic abstract operation that can be reused by `String.raw`. When making the pull request into ecma262, we should update `String.raw` as well.</p>
+    </emu-note>
+  </emu-clause>
 </emu-clause>
