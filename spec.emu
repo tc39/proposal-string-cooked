@@ -24,7 +24,7 @@ contributors: Darien Maillet Valentine
     </emu-alg>
 
     <emu-note>
-      <p>The `cooked` function implements behavior suitable for a tag function of a Tagged Template (<emu-xref href="#sec-tagged-templates"></emu-xref>). When called as such, the first argument will be a well formed template object and the rest parameter will contain the substitution values. In practice, it is more useful as a function which custom tag functions _delegate_ to as a final step.</p>
+      <p>The `cooked` function implements behaviour suitable for a tag function of a Tagged Template (<emu-xref href="#sec-tagged-templates"></emu-xref>). When called as such, the first argument will be a well formed template object and the rest parameter will contain the substitution values. In practice, it is more useful as a function which custom tag functions _delegate_ to as a final step.</p>
     </emu-note>
   </emu-clause>
 
@@ -34,7 +34,7 @@ contributors: Darien Maillet Valentine
         _template_: an ECMAScript language value,
         _substitutions_: a List of ECMAScript language values,
         _prep_: ~cooked~ or ~raw~,
-      ): a String
+      ): either a normal completion containing a String or a throw completion
     </h1>
     <dl class="header">
     </dl>

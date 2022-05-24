@@ -4,8 +4,8 @@
   "description": "ECMAScript proposal for String.cooked built-in template tag.",
   "scripts": {
     "start": "npm run build-loose -- --watch",
-    "build": "npm run build-loose -- --strict",
-    "build-loose": "ecmarkup --verbose spec.emu index.html"
+    "build": "npm run build-loose -- --strict --lint-spec",
+    "build-loose": "ecmarkup --load-biblio @tc39/ecma262-biblio --verbose spec.emu index.html"
   },
   "homepage": "https://github.com/bathos/proposal-string-cooked#readme",
   "repository": {
@@ -14,6 +14,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@tc39/ecma262-biblio": "2.0.2321",
     "ecmarkup": "12.1.0"
   }
 }
